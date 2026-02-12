@@ -5,88 +5,10 @@
 #include <float.h>
 
 #include <math.h>
+#include "list_types.h"
+#include "getlist.h"
+#include "validindexarray.h"
 
-typedef struct {
-    float x;
-    float y;
-    
-} entry_t;
-
-typedef struct {
-    int len;
-    entry_t* p;
-}list_t;
-
-
-list_t get_list(const char * filename){
-
-    
-    FILE* file= fopen(filename, "r");
-    if(!file){
-        printf("couldn't open file\n");
-        return (list_t){0,0};
-    }
-
-    int countedlines=0;
-    
-    while(countedlines<6){
-        int letter1 =fgetc(file);
-        if(letter1==EOF){
-            printf("less than 4 lines!\n");
-            return (list_t){0,0};
-        }
-        if(letter1=='\n'){
-            countedlines++;
-        }
-    }
-    
-    fpos_t pos; 
-    int answer=fgetpos(file,&pos);
-    //printf("did I use getfpos correctly? %d\n",answer);
-
-    int len;
-    while(true){
-        
-
-        float x, y;
-
-        int valid_items=fscanf(file, "%d %f %f", &len, &x, &y);
-        
-        if(valid_items<3){
-            //printf("length of list is %d\n",len-1);
-            break;
-        }
-
-        //printf("%c",(int)letter);
-    }
-    //printf("\n");
-    //printf("1, allocing for %d\n",len);
-    entry_t* entries=malloc(sizeof(entry_t)*(len));
-    int index=0;
-    fsetpos(file,&pos);
-
-    //printf("going again:\n \n");
-     while(true){
-        //int letter=fgetc(file);
-        //if(letter==EOF){break;}
-
-        int id;
-        float x, y;
-
-        int valid_items=fscanf(file, "%d %f %f", &id, &x, &y);
-        if(valid_items<3){
-            break;
-        }
-        entries[index]=(entry_t){x,y};
-        index++;
-        //printf("%f %f \n", x,y);
-        //printf("%c",(int)letter);
-    }
-    //printf("\n");
-
-    return (list_t){len,entries};
-
-}
 
 
 
@@ -462,7 +384,7 @@ int * greedyswapfortime2(int * array, list_t lp, int seconds){
 
 
 
-
+/*
 //This one can be way more time effective, reducing from N^2 to N if we make another array as well and just mark every number we get!
 bool isvalidsolution(int* array, int len){
     bool found;
@@ -493,6 +415,7 @@ bool isvalidsolution2(int* array, int len){
     }
     return true;
 }
+*/
 
 void printstring(char * cp){
     char *ecp=cp;
@@ -539,7 +462,7 @@ int main(){
 
 
 
-    list_t lp=get_list("tsp_fun.tsp");
+    list_t lp=getlist("tsp_fun.tsp");
 
     //printf("full list from main of length %d\n",lp.len);
     /*
@@ -579,20 +502,21 @@ int main(){
     //eval(FI,lp,random_dist,"FI");
     
     printf("TRYING THE GREEDY SEARCH ALGORITHM\n");
-    for(int i=1;i<5;i++){
+    for(int i=1;i<8;i++){
         int * greedyfortime=greedyswapfortime(array,lp,i);
         printf("%d:\n",i);
         eval_new_array(greedyfortime, lp,random_dist, "greedy swapper");
 
     }
-
+    /*
     printf("TRYING THE SECOND GREEDY SEARCH ALGORITHM\n");
     for(int i=1;i<5;i++){
         int * greedyfortime=greedyswapfortime2(array,lp,i);
         printf("%d:\n",i);
         eval_new_array(greedyfortime, lp,random_dist, "greedy swapper");
-
+        
     }
+    */
     //int * greedyswapfortime(int * array, list_t lp, int seconds)
 
     
