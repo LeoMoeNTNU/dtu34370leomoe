@@ -1,9 +1,9 @@
-### What would be cool:
+# What would be cool:
 
 ## modularization
 
 ## implement chirstofides-stuff. 
-# includes MST first. 
+### includes MST first. 
 
 ## good randomized testing, both for different problem sizes. 
 

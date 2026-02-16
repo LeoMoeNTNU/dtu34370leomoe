@@ -1,0 +1,1 @@
+gcc NN.c getlist.c validindexarray.c -lm

@@ -1,0 +1,1 @@
+gcc getmatrix.c main.c randomarray.c
