@@ -1,0 +1,1 @@
+void fillarraywithrandom(int * ip, int len, int maxnum);

@@ -1,0 +1,5 @@
+make run ARG1=Instances/leo_easy.sop ARG2=sols/leo_easy.sop ARG3=10
+
+bash test.sh leo_easy.sop
+
+bash test2.sh ESC07.sop

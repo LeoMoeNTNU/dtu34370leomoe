@@ -1,0 +1,6 @@
+get_first_valid_index
+infotools
+isallowedtoplacehere
+objectivefunction
+placeopinjob
+randomlist
