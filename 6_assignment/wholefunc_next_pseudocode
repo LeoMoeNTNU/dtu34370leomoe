@@ -1,0 +1,16 @@
+
+
+initialize a random array: 
+
+have a bool for knowing which is the important one. 
+while has time: 
+    12 times:
+        if i<8: run best one, else run worse one.  
+        
+        each time it will return the new int*
+        it will also return a bool, for whether or not it improved. 
+        if improved:
+            int * = returned pointer, free other pointer.
+            update value.  
+        else: 
+            free returned

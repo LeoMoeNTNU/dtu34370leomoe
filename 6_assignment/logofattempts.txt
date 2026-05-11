@@ -1,0 +1,20 @@
+First I just implemented localsearch on 15_15_1I. I got the values around. 
+
+Simulated annealing hasn't been a lot slowly. Goes from around 25000 iterations to around 23000, around a 10% decrease. 
+
+Then I did simulated annealing with a linear likelihood (yesorno1) which produced high values around 1170. 
+
+Then I did one where I had a fairly high likelihood at the beginning and 0% after halfway and got 1009. 
+
+After a few tests: 
+for some reason the simulated annealing with yesorno2 gets more iterations but worse value. 
+localsearch does 26 000 but 1010 and yesorno2 does 1030 and 33 000. 
+
+It still was an improvement, so I will see if I can beat the localsearch. 
+
+
+yesorno3 had a higher likelihood in the beginning and it was still worse.
+Still many iterations... 
+For this reason, it seems like the conclusion to take is that making it closer to localsearch is just better. 
+
+yesorno4 is going way closer to localsearch. 
