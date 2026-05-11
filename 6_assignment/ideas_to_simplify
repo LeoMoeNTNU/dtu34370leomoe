@@ -1,0 +1,12 @@
+Right now, the challenge I have is that the objective_function only works for full lists. 
+
+One thing that I can do is that I can re-sort the things in each of the buckets. 
+This is a bit of a new neighbourhood. 
+
+Maybe there are other neighbourhood functions. 
+I can simply swap each which is followed by the biggest gap or smallest gap.
+    We assume that they are badly placed and shouldn't be placed that way. 
+    We check if it is an improvement. 
+
+This one is the other one. 
+We just re-order the whole neighbourhood and see if it is better. 
