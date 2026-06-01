@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_LENGTH 40
+#define MAX_LENGTH 10000
 
 void int_arr_crossover(int *parent1, int *parent2, int *child, int length)
 {
@@ -53,6 +53,21 @@ void int_arr_crossover(int *parent1, int *parent2, int *child, int length)
         }
         child[i] = candidate;
         visited[candidate] = 1; // Mark the candidate as visited
+    }
+}
+
+void mutate(int *arr, int length, double mutation_rate)
+{
+    for (int i = 0; i < length; i++)
+    {
+        if (((double)rand()) / RAND_MAX < mutation_rate)
+        {
+            int j = rand() % length;
+            // Swap arr[i] and arr[j]
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
     }
 }
 

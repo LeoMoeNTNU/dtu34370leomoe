@@ -1,0 +1,64 @@
+/* pseudocode: 
+    what this one will do: 
+    1. generate x good potential solutions. 
+        We just allocate for it and then we insert it. 
+    2. Maybe sort them from best to worst. 
+        After having sorted them from best to worst, simply always insert a new one and remove the worst one. 
+    3. I will just have a running pointer and then insert things correctly. 
+        There could be bugs from this, but I dont think so. 
+    
+
+    I should actually only have a list for int pointers and their value so that I dont have to evaluate more than once. 
+    Andreas has already implemented the PMX.code.
+    
+*/
+
+/* PSEUDOCODE 2: 
+    # define SOLUTIONCOUNT 20
+    
+    int solutionlength; //Solution length
+    int* solutions[SOLUTIONCOUNT];
+    int sol_vals[SOLUTIONCOUNT];
+
+    //This loop sets up the set of pointers. 
+    for(int i=0;i<SOLUTIONCOUNT;i++){
+        solutions[i]=malloc(sizeof(int)*solutionlength);
+        makerandomlist(solutions[i]);
+        sol_vals[i]=value(solutions[i]);
+    }
+
+    //then I do bubble sort:
+    for(int i=0;i<SOLUTIONCOUNT;i++){
+        for(int j=0;j<SOLUTIONCOUNT-1-i;j++){
+        swap if we should (j,j+1)
+            swap both the pointers in solutions and the values in sol_vals.
+        }
+    }
+
+    //at this point we should have a sorted and correct list. 
+    //from here, we just have a while(time)-loop.
+    
+    while time: 
+        int firsthigh=highint(SOLUTIONCOUNT);
+        int sechigh=highint(SOLUTIONCOUNT);
+        
+        produce both of the pmx-versions. 
+        put the best one of them back in, at the position it should be in the array. 
+        This is insertionsort.
+        int * one=pmx(firsthigh,sechigh);
+        int insertvalue=value(one);
+        int index=0;
+        free(solutions[0]);
+        if(sol_vals[0]>insertvalue){nothing more to do here then}
+        else{swap(0,one(the array))}
+
+        while(sol_vals[index]>sols_vals[index+1]&&index<SOLUTIONCOUNT-1){
+            swap both the array pointer and the value. 
+            //make sure that we dont run out of the array
+
+
+        }
+    
+
+
+*/

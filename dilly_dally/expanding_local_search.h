@@ -1,0 +1,1 @@
+int expanding_localsearch(int max,void (*f)(int* ,int));

@@ -19,7 +19,8 @@ long long millis_now(void) {
 }
 
 
-#define POPULATION 40
+#define POPULATION 300
+#define MUTATION_RATE 0.01
 
 void swap_up(int j, int *ip, int** ipp){
     int swap_int;
@@ -34,83 +35,151 @@ void swap_up(int j, int *ip, int** ipp){
     ipp[j+1]=swap_p;
 }
 
+int random_parent(int** population, int* population_vals, int pop_size){
+    int max_val = 0;
+    for (int i = 0; i < pop_size; i++) {
+        if (population_vals[i] > max_val) {
+            max_val = population_vals[i];
+        }
+    }
+    
+    int total_inverse_value = 0;
+    for (int i = 0; i < pop_size; i++) {
+        total_inverse_value += (max_val - population_vals[i] + 1);
+    }
+    
+    int r = rand() % total_inverse_value;
+    
+    int cum_sum = 0;
+    for (int i = 0; i < pop_size; i++) {
+        cum_sum += (max_val - population_vals[i] + 1);
+        if (r < cum_sum) 
+            return i;
+    }
+    return pop_size - 1; 
+}
+
+int random_individual_to_kill(int** population, int* population_vals, int total_value, int pop_size){
+    int r = rand() % total_value;
+    
+    int cum_sum = 0;
+    for (int i = 0; i < pop_size; i++) {
+        cum_sum += population_vals[i];
+        if (r < cum_sum) {
+            return i;
+        }
+    }
+    
+    return pop_size - 1; 
+}
+
+int find_best_individual(int* population_vals, int pop_size){
+    int best_index = 0;
+    for (int i = 1; i < pop_size; i++) {
+        if (population_vals[i] < population_vals[best_index]) {
+            best_index = i;
+        }
+    }
+    return best_index;
+}
+
+void copy_individual(int* source, int* destination, int length) {
+    for (int i = 0; i < length; i++) {
+        destination[i] = source[i];
+    }
+}
+
+// genetic_algorithm_solver
 int wholefunc(char* cp, char* towriteto, int intime_sec){
     long long intime = (long long)intime_sec * 1000LL;
     info_t info=get(cp);
-    int arrlen=info.len*info.len;
-    int *sols[POPULATION];
-    int sol_vals[POPULATION];
+    int arrlen = info.len * info.len;
+    
+    int *population[POPULATION]; // population
+    int population_vals[POPULATION]; // population_vals
     long long starttime=millis_now();
     //printf("got here!\n");
     //this is to initialize a random population. 
+    
+    int best_value = 0;
+    int* best_individual = malloc(arrlen * sizeof(int));
+    int total_value=0;
     for(int i=0;i<POPULATION;i++){
         int* ip=randomlist(arrlen);
-        sols[i]=ip;
-        sol_vals[i]=value(info,sols[i]);
-
+        population[i]=ip;
+        population_vals[i]=value(info,population[i]);
+        total_value+=population_vals[i];
+        if (i == 0 || population_vals[i] < best_value) {
+            best_value = population_vals[i];
+            copy_individual(population[i], best_individual, arrlen);
+        }
     }
-
+    
     //now I want to get it sorted:
     //I can probably change j<POPULATION-1 to j<POPULATION-1-i if I so wish because thats how bubble sort works. 
-    for(int i=0;i<POPULATION;i++){
-        for(int j=0;j<POPULATION-1;j++){
-            if(sol_vals[j]>sol_vals[j+1]){
-               swap_up(j,sol_vals,sols);
-            }
-        }
-    } 
-    /*
-    for(int i=0;i<POPULATION;i++){
-        printf("%d: %d\n",i,sol_vals[i]);
-    }
-    */
-    //printf("got here 2\n");
-    int *current;
-    int current_value;
+    // for(int i=0;i<POPULATION;i++){
+        //     for(int j=0;j<POPULATION-1;j++){
+            //         if(population_vals[j]>population_vals[j+1]){
+                //            swap_up(j,population_vals,population);
+                //         }
+                //     }
+                // } 
+                /*
+                for(int i=0;i<POPULATION;i++){
+                    printf("%d: %d\n",i,population_vals[i]);
+                    }
+                    */
+                    //printf("got here 2\n");
+                    
+    int iterations = 0;
     while(millis_now()-starttime<intime){
+        iterations++;
         //printf("got here 3\n");
-        int firstint=highint(POPULATION);
-        int secint=highint(POPULATION);
-        current=malloc(sizeof(int)*arrlen);
-        //printf("first int: %d, second int: %d\n",firstint,secint);
+        int parent1 = random_parent(population, population_vals, POPULATION);
+        int parent2 = random_parent(population, population_vals, POPULATION);
+        int indiv_to_kill = random_individual_to_kill(population, population_vals, total_value, POPULATION);
         /*
-        for(int i=0;i<arrlen;i++){
-            printf("%d ",sols[firstint][i]);
-        }printf("\n");
+        int =highint(POPULATION);
+        int secint=highint(POPULATION);
         */
-        int_arr_crossover(sols[firstint], sols[secint], current, arrlen);
+        //printf("first int: %d, second int: %d\n",firstint,secint);
+        
+        int_arr_crossover(population[parent1], population[parent2], population[indiv_to_kill], arrlen);
+        mutate(population[indiv_to_kill], arrlen/5, MUTATION_RATE);
+
+        int current_value = value(info, population[indiv_to_kill]);
         //printf("got a value\n");
-        current_value=value(info,current);
         //printf("the value is %d\n",current_value);
         //printf("got here 4\n");
-        
-        if(current_value>sol_vals[0]){
-            free(current);
-            continue;
-
-        }
-        sol_vals[0]=current_value;
-        free(sols[0]);
-        sols[0]=current;
-        int index=0;
-        //printf("got here 5\n");
-        while(sol_vals[index]<sol_vals[index+1]&&index<POPULATION){
-            swap_up(index,sol_vals,sols);
+        total_value -= population_vals[indiv_to_kill];
+        total_value += current_value;
+        population_vals[indiv_to_kill] = current_value;
+        if (current_value < best_value) {
+            best_value = current_value;
+            copy_individual(population[indiv_to_kill], best_individual, arrlen);
         }
         //printf("got here 6\n");
+        
     }
-    ap_and_val_t toprint=value_with_procs(info,sols[0]);
-    writetofile(info.len,toprint.ap,towriteto);
+
+
+    ap_and_val_t toprint = value_with_procs(info,best_individual);
+    
+    writetofile(info.len, toprint.ap, towriteto);
     killallprocs(toprint.ap);
     /*
     for(int i=0;i<POPULATION;i++){
-        printf("%d ",sol_vals[i]);
+        printf("%d ",population_vals[i]);
     }printf("\n");
     */
+   printf("iterations: %d\n",iterations);
    printf("final value: %d\n",toprint.val);
    for(int i=0;i<POPULATION;i++){
-    free(sols[i]);
+    free(population[i]);
    }
+   free(best_individual);
+
+    free(info.processors);
+    free(info.duration);
     return toprint.val;
-    
 } 
