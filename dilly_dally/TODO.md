@@ -62,8 +62,8 @@ wholefunc(info_t info, int time)//maybe not an int.
 generate random int array of length n. 
 get score and maintain max score. 
 
-for size 2, produce all arrays of length 2. 
-I am right now working on the each_order function.
+# for now I am working on expanding local search. 
+Currently an error in inner_swap which I dont understand quite yet sadly. 
 
 
 
